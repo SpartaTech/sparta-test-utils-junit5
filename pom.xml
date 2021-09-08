@@ -66,7 +66,9 @@
 
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- versions -->
 		<slf4j.version>1.7.32</slf4j.version>
@@ -184,7 +186,7 @@
 			            </goals>
 			        </execution>
 			    </executions>
-			</plugin> 
+			</plugin>
 		</plugins>
 	</build>
 
