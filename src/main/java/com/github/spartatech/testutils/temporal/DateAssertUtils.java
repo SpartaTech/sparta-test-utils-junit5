@@ -28,12 +28,12 @@ public abstract class DateAssertUtils {
 
     /**
      * Assert date fields in the date elements.
-     * 
-     * @param message message in case user wants to show a custom message
-     * @param expected Expected Date 
-     * @param actual Actual Date
-     * @param fields Calendar fields to be compared
-     * @throws ComparisonFailure in case comparison fails
+     *
+     * @param message  message in case user wants to show a custom message
+     * @param expected Expected Date
+     * @param actual   Actual Date
+     * @param fields   Calendar fields to be compared
+     * @throws AssertionFailedError in case comparison fails
      */
     public static void assertDate(String message, Date expected, Date actual, int... fields) throws AssertionFailedError {
         if (fields.length == 0) {
@@ -53,28 +53,28 @@ public abstract class DateAssertUtils {
             }
         }
     }
-    
+
     /**
      * Assert date fields in the date elements. Shows a standard failures message.
-     * 
-     * @param expected Expected Date 
-     * @param actual Actual Date
-     * @param fields Calendar fields to be compared
-     * @throws ComparisonFailure in case comparison fails
+     *
+     * @param expected Expected Date
+     * @param actual   Actual Date
+     * @param fields   Calendar fields to be compared
+     * @throws AssertionFailedError in case comparison fails
      */
     public static void assertDate(Date expected, Date actual, int... fields) throws AssertionFailedError {
         assertDate(null, expected, actual, fields);
     }
-    
-    
+
+
     /**
      * Compares Dates by format
-     * 
-     * @param message to be presented in case of error
+     *
+     * @param message  to be presented in case of error
      * @param expected expected date
-     * @param actual actual date
-     * @param format format to be applied to both dates before comparing
-     * @throws ComparisonFailure in case comparison fails
+     * @param actual   actual date
+     * @param format   format to be applied to both dates before comparing
+     * @throws AssertionFailedError in case comparison fails
      */
     public static void assertDateByFormat(String message, Date expected, Date actual, String format) throws AssertionFailedError {
         final SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -87,24 +87,24 @@ public abstract class DateAssertUtils {
                     exepctedFormatted, actualFormatted);
         }
     }
-    
+
     /**
      * Compares Dates by format.
-     * 
+     *
      * @param expected expected date
-     * @param actual actual date
-     * @param format format to be applied to both dates before comparing
-     * @throws ComparisonFailure in case comparison fails
+     * @param actual   actual date
+     * @param format   format to be applied to both dates before comparing
+     * @throws AssertionFailedError in case comparison fails
      */
     public static void assertDateByFormat(Date expected, Date actual, String format) throws AssertionFailedError {
         assertDateByFormat(null, expected, actual, format);
     }
-    
+
     /**
      * Finds a field name of the calendar by the field Id
-     * 
+     *
      * @param fieldId Field Id, value
-     * @return Field Name 
+     * @return Field Name
      * @throws FieldNotFoundException when the fields does not exist for Calendar
      */
     private static String findCalendarFieldName(int fieldId) throws FieldNotFoundException {
@@ -115,7 +115,7 @@ public abstract class DateAssertUtils {
                         return field.getName();
                     }
                 } catch (IllegalArgumentException|IllegalAccessException e) {
-                    continue;
+                    throw new FieldNotFoundException("Field ["+ fieldId + "] not found as a constant in Calendar");
                 }
             }
         }

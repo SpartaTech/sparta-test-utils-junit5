@@ -201,7 +201,7 @@ public class TestCollectionAssert extends CollectionAssert {
         CollectionAssert.assertListByReflection(listOne, listTwo);
     }
     
-    class TestObj {
+    static class TestObj {
         private String field1;
         private int field2;
         private Date field3;
@@ -209,10 +209,10 @@ public class TestCollectionAssert extends CollectionAssert {
         
         
         /**
-         * @param field1
-         * @param field2
-         * @param field3
-         * @param field4
+         * @param field1 field one
+         * @param field2 field two
+         * @param field3 field three
+         * @param field4 field four
          */
         public TestObj(String field1, int field2, Date field3, Long field4) {
             super();
@@ -269,7 +269,5 @@ public class TestCollectionAssert extends CollectionAssert {
         public void setField4(Long field4) {
             this.field4 = field4;
         }
-        
-        
     }
 }

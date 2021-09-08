@@ -8,8 +8,10 @@ package com.github.spartatech.testutils.logback.constant;
  * 
  * History: 
  *    Dec 27, 2016 - Daniel Conde Diehl
+ *    Sep 07, 2021 - Daniel Conde Diehl - Adjusting Javadocs
  *  
  */
 public enum ExpectValue {
-    ANY, //Allows any value as parameters
+    /** Allows any value as parameters **/
+    ANY,
 }

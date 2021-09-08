@@ -144,7 +144,7 @@ Uses:
 
 ### Assert exception message
 
-Let's you assert that teh exception being thrown is the one you're expecting also matching the message.
+It Lets you assert that teh exception being thrown is the one you're expecting also matching the message.
 
 * The first parameter is the exception you are expecting with the message that should happen.
 * The second parameter is a boolean indicating of the exception happened in the tested method should be thrown or swallowed. You can use true if you want to stop execution and in you annotation use @Test(expected=Exception), or false if you just want to assert this exception, and finish the test.
@@ -158,3 +158,56 @@ ExceptionAssert.assertExceptionMessage(new Exception("Message Expected"), false,
 			//Call the method to be tested
 	});
 ~~~
+
+### Logback Junit extension to change level
+If your code uses log.isXXXEnabled() tests, you might have trouble trying to get code coverage on that,
+since the code depends on log level, you will not test both scenarios.
+This extension allows you to change logback log level for a given logName per test method, allowing you to 
+create 2 scenarios, one with log level on, and one with log level off.
+
+***Usage:***
+
+Consider you have this class:
+
+~~~Java
+public class MyClass {
+    public static Logger log = LoggerFactory.getLogger("test-log");
+    
+    public void myMethod() {
+        if (log.isDebugEnabled()) {
+            log.debug("test log");
+        }
+    }
+}
+~~~
+
+Then you could test both scenarios like this:
+
+~~~Java
+import com.github.spartatech.testutils.logback.LogbackLevelChangerExtension;
+import com.github.spartatech.testutils.logback.LogbackRunLevel;
+import com.github.spartatech.testutils.logback.constant.LogLevel;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+@ExtendWith(LogbackLevelChangerExtension.class)
+public class TestMyClass {
+
+    private MyClass testClass = new MyClass();
+    
+    @Test
+    @LogbackRunLevel(loggerName = "test-log", newLevel = LogLevel.ERROR)
+    public void testNoLog() {
+       testClass.myMethod();
+       //No logs should appear
+    }
+
+    @Test
+    @LogbackRunLevel(loggerName = "test-log", newLevel = LogLevel.DEBUG)
+    public void testLog() {
+        testClass.myMethod();
+        //logs should appear
+    }
+}
+~~~
+

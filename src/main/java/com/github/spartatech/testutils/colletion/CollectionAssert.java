@@ -30,14 +30,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class CollectionAssert {
     
-    public static final Logger LOGGER = LoggerFactory.getLogger(CollectionAssert.class);
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectionAssert.class);
+
     /**
-     * Compares two lists using the comparator
-     * 
-     * @param <A> Type of list element
-     * @param listOne left side list
-     * @param listTwo right side list
+     * Compares two lists using the comparator.
+     *
+     * @param <A>               Type of list element
+     * @param listOne           left side list
+     * @param listTwo           right side list
      * @param elementComparator comparator to compare records
      */
     public static <A> void assertList(final Collection<A> listOne, final Collection<A> listTwo, Comparator<A> elementComparator) {
@@ -62,18 +62,18 @@ public abstract class CollectionAssert {
         
         if (!listTwoCopy.isEmpty() || !listOneCopy.isEmpty()) {
             final StringBuilder msg =  new StringBuilder("Lists are not similar.").append(System.getProperty("line.separator"));
-            listOneCopy.forEach(item -> msg.append("List one: ").append("Remaining: " + ReflectionToStringBuilder.toString(item)).append(System.getProperty("line.separator")));
-            listTwoCopy.forEach(item -> msg.append("List two: ").append("Remaining: " + ReflectionToStringBuilder.toString(item)).append(System.getProperty("line.separator")));
+            listOneCopy.forEach(item -> msg.append("List one: ").append("Remaining: ").append(ReflectionToStringBuilder.toString(item)).append(System.getProperty("line.separator")));
+            listTwoCopy.forEach(item -> msg.append("List two: ").append("Remaining: ").append(ReflectionToStringBuilder.toString(item)).append(System.getProperty("line.separator")));
             fail(msg.toString());
         }
     }
-    
+
     /**
-     * Assert that two lists are same using reflection to compare elements. 
-     * 
-     * @param <A> Type of list element
-     * @param listOne List one to be compared
-     * @param listTwo list two compared
+     * Assert that two lists are same using reflection to compare elements.
+     *
+     * @param <A>            Type of list element
+     * @param listOne        List one to be compared
+     * @param listTwo        list two compared
      * @param excludedFields fields to exclude from comparison
      */
     public static <A> void assertListByReflection(final Collection<A> listOne, final Collection<A> listTwo, String...excludedFields) {
@@ -89,26 +89,37 @@ public abstract class CollectionAssert {
                         field.setAccessible(false);
                         
                         if (val1 == null && val2 != null) {
-                           LOGGER.debug("For Field {}: val1 was null, but val2 was not null");
+                           LOGGER.debug("For Field {}: val1 was null, but val2 was not null", field.getName());
                            return 1;
                         }
 
                         if (val1 != null && val2 == null) {
-                            LOGGER.debug("For Field {}: val1 was not null, but val2 was null");
+                            LOGGER.debug("For Field {}: val1 was not null, but val2 was null", field.getName());
                             return 1;
                          }
                         
-                        if (val1== null && val2 == null) {
+                        if (val1 == null && val2 == null) {
                             LOGGER.debug("Both are null considering same");
                         } else {
-                            String val1Str = ReflectionToStringBuilder.toString(val1, ToStringStyle.SHORT_PREFIX_STYLE);
-                            String val2Str = ReflectionToStringBuilder.toString(val2, ToStringStyle.SHORT_PREFIX_STYLE);
+                           String val1Str;
+                            try {
+                                val1Str = ReflectionToStringBuilder.toString(val1, ToStringStyle.SHORT_PREFIX_STYLE);
+                            } catch (Exception e) {
+                                val1Str = val1.toString();
+                            }
+                            String val2Str;
+                            try {
+                                val2Str = ReflectionToStringBuilder.toString(val2, ToStringStyle.SHORT_PREFIX_STYLE);
+                            } catch (Exception e) {
+                                val2Str = val2.toString();
+                            }
                             if (!val1Str.equals(val2Str)) {
                                 LOGGER.debug("Field=[{}]. val1={}, val2={}", field.getName(), val1, val2);
                                 return 1;
                             }
                         }
                     } catch (Exception e) {
+                        LOGGER.error("Failure", e);
                         fail("Exception not expected comparing field "+ field.getName() + ": " + e.getMessage());
                     }
                 }
