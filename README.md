@@ -1,5 +1,5 @@
 # sparta-test-utils - Junit5 
-[![Build Status](https://travis-ci.org/SpartaTech/sparta-test-utils-junit5.svg?branch=master)](https://travis-ci.org/SpartaTech/sparta-test-utils-junit5)
+[![Build Status](https://app.travis-ci.com/SpartaTech/sparta-test-utils-junit5.svg?branch=master)](https://app.travis-ci.com/SpartaTech/sparta-test-utils-junit5.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/SpartaTech/sparta-test-utils-junit5/badge.svg?branch=master)](https://coveralls.io/github/SpartaTech/sparta-test-utils-junit5?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.spartatech/sparta-test-utils-junit5/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.spartatech/sparta-test-utils-junit5/)
 
