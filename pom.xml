@@ -6,7 +6,7 @@
 
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>sparta-test-utils-junit5</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 
 	<name>Sparta Test Utils - Junit5</name>
 	<description>Utility classes for unit testing. Port for Junit5 Jupiter</description>
@@ -75,7 +75,7 @@
 		<commons-lang.version>3.12.0</commons-lang.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<junit.version>5.7.2</junit.version>
-		<logback.version>1.2.5</logback.version>
+		<logback.version>1.2.9</logback.version>
 		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 	</properties>
 
