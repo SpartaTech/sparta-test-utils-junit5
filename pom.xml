@@ -75,7 +75,7 @@
 		<commons-lang.version>3.12.0</commons-lang.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<junit.version>5.7.2</junit.version>
-		<logback.version>1.2.9</logback.version>
+		<logback.version>1.3.12</logback.version>
 		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 	</properties>
 
