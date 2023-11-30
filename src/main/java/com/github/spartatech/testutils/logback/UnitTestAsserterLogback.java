@@ -2,6 +2,8 @@ package com.github.spartatech.testutils.logback;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.LoggerFactory;
@@ -23,18 +25,18 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
  * - call {@code UnitTestAsserterLogback.assertLogExpectations()}
  * 
  * @author Daniel Conde Diehl
- * 
  * History: 
- *    Dec 27, 2016 - ddiehl
- *    Aug 03, 2020 - ddiehl - Porting to Junit5 Jupiter
+ *    Dec 27, 2016 - Daniel Conde Diehl
+ *    Aug 03, 2020 - Daniel Conde Diehl - Porting to Junit5 Jupiter
+ *    Nov 30, 2023 - Daniel Conde Diehl - Removing deprecated method, adding lambda expectation
  *  
  */
 public class UnitTestAsserterLogback  {
 
-    private LinkedList<LogEntryItem> expectations = new LinkedList<>();
-    private LinkedList<ILoggingEvent> events = new LinkedList<>();
+    private final LinkedList<LogEntryItem> expectations = new LinkedList<>();
+    private final LinkedList<ILoggingEvent> events = new LinkedList<>();
     
-    private UnitTestAsserterLogbackAppender appender;
+    private final UnitTestAsserterLogbackAppender appender;
     
     
     /**
@@ -65,20 +67,7 @@ public class UnitTestAsserterLogback  {
     public void addExpectation(Level level, String logMessage, Object...params) {
         expectations.add(new LogEntryItem(level, logMessage, params));
     }
-    
-    
-    
-    /**
-     * Replay expectations to check if all logs happened.
-     * Analyzes in order and all logs supposed to be there 
-     * 
-     * @throws AssertionError Throws an assertion error when the asserts fail
-     * @deprecated this method will be remove in future releases, please use {@code UnitTestAsserterLogback.assertLogExpectations(false)} instead
-     */
-    @Deprecated
-    public void assertLogExpectations() throws AssertionError {
-    	assertLogExpectations(false);
-    }    
+
     
     /**
      * Replay expectations to check if all logs happened.
@@ -95,8 +84,7 @@ public class UnitTestAsserterLogback  {
             }
             
             for (ILoggingEvent event : events) {
-
-                LogEntryItem entry = expectations.remove();
+                final LogEntryItem entry = expectations.remove();
 
                 if (!entry.getMessage().equals(event.getMessage())) {
                     throw new AssertionFailedError("Message mismatch", entry.getMessage(), event.getMessage());
@@ -124,7 +112,22 @@ public class UnitTestAsserterLogback  {
             }
     	}
     }
-    
+
+    /**
+     * Custom asserter, delegate the validation to all messages to a provided supplier.
+     * Can be used for more complex validations, also can be used in conjunction with
+     * normal asserter.
+     *
+     * @param customEvaluator supplier that will receive all the messages to evaluate
+     * @throws AssertionError in case a validation fails
+     */
+    public void assertLogExpectations(Consumer<List<LogEntryItem>> customEvaluator) throws AssertionError {
+        final List<LogEntryItem> messages = events.stream()
+                .map(event -> new LogEntryItem(event.getLevel(), event.getMessage(), event.getArgumentArray()))
+                .toList();
+
+        customEvaluator.accept(messages);
+    }
 
     /**
      * Compares an expected entry with a logging event, checking if the level, and param match.
@@ -152,13 +155,11 @@ public class UnitTestAsserterLogback  {
             if (ExpectValue.ANY == expectedParam) {
                 continue;
             }
-            
-            if (expectedParam == null && actualParam == null) {
-                continue;
-            } else if (expectedParam == null && actualParam != null) {
+
+            if (expectedParam == null && actualParam != null) {
                 throw new AssertionFailedError("Param [" + i + "] mismatch", "null", actualParam.toString());
-            } else if (!expectedParam.equals(actualParam)) {
-                throw new AssertionFailedError("Param [" + i + "] mismatch", expectedParam == null ? "NULL" : expectedParam.toString(), actualParam == null ? "NULL" : actualParam.toString());
+            } else if (expectedParam != null && !expectedParam.equals(actualParam)) {
+                throw new AssertionFailedError("Param [" + i + "] mismatch", expectedParam.toString(), actualParam == null ? "NULL" : actualParam.toString());
             }
         }
     }
@@ -175,23 +176,22 @@ public class UnitTestAsserterLogback  {
      * 
      * Internal VO to carry log entries for asserting values.
      * 
-     * @author Daniel Conde Diehl 
-     * 
+     * @author Daniel Conde Diehl
      * History: 
      *    Jan 15, 2017 - Daniel Conde Diehl
      *  
-     */ 
-    class LogEntryItem {
-        private Level level;
-        private String message;
-        private Object[] params;
-        
+     */
+    public static class LogEntryItem {
+        private final Level level;
+        private final String message;
+        private final Object[] params;
+
         /**
          * Constructor with all values.
-         * 
-         * @param level log loevel for the message
+         *
+         * @param level   log level for the message
          * @param message text message
-         * @param params params used in the log
+         * @param params  params used in the log
          */
         public LogEntryItem(Level level, String message, Object[] params) {
             this.level = level;
@@ -224,15 +224,10 @@ public class UnitTestAsserterLogback  {
 		 */
 		@Override
 		public String toString() {
-			StringBuilder builder = new StringBuilder();
-			builder.append("[level=");
-			builder.append(level);
-			builder.append(", message=");
-			builder.append(message);
-			builder.append(", params=");
-			builder.append(Arrays.toString(params));
-			builder.append("]");
-			return builder.toString();
+            return "[level=" + level +
+                    ", message=" + message +
+                    ", params=" + Arrays.toString(params) +
+                    "]";
 		}
     }
-};
+}

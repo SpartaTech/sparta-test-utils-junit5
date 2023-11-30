@@ -6,7 +6,7 @@
 
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>sparta-test-utils-junit5</artifactId>
-	<version>1.1</version>
+	<version>2.0</version>
 
 	<name>Sparta Test Utils - Junit5</name>
 	<description>Utility classes for unit testing. Port for Junit5 Jupiter</description>
@@ -66,12 +66,12 @@
 
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- versions -->
-		<slf4j.version>1.7.32</slf4j.version>
+		<slf4j.version>2.0.9</slf4j.version>
 		<commons-lang.version>3.12.0</commons-lang.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<junit.version>5.7.2</junit.version>
