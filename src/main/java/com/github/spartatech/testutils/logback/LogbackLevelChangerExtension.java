@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,8 +43,7 @@ public class LogbackLevelChangerExtension implements InvocationInterceptor {
         try {
             for (LogbackRunLevel annLevel : levelsList) {
                 final Logger log = getLogger(annLevel);
-                if (log instanceof ch.qos.logback.classic.Logger) {
-                    final ch.qos.logback.classic.Logger logBackLog = (ch.qos.logback.classic.Logger) log;
+                if (log instanceof ch.qos.logback.classic.Logger logBackLog) {
                     originalLevels.put(logBackLog, logBackLog.getLevel());
                     logBackLog.setLevel(annLevel.newLevel().getLevel());
                 }
