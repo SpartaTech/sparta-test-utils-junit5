@@ -55,6 +55,11 @@ public class LogbackLevelChangerExtension implements InvocationInterceptor {
         }
     }
 
+    @Override
+    public void interceptTestTemplateMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
+        interceptTestMethod(invocation, invocationContext, extensionContext);
+    }
+
     /**
      * Retrieves the logger based upon the annotation.
      * First tries to get by Class, if class is not informed,

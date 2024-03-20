@@ -6,7 +6,7 @@
 
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>sparta-test-utils-junit5</artifactId>
-	<version>2.0</version>
+	<version>2.1</version>
 
 	<name>Sparta Test Utils - Junit5</name>
 	<description>Utility classes for unit testing. Port for Junit5 Jupiter</description>
@@ -74,7 +74,7 @@
 		<slf4j.version>2.0.9</slf4j.version>
 		<commons-lang.version>3.12.0</commons-lang.version>
 		<commons-io.version>[2.4,)</commons-io.version>
-		<junit.version>5.7.2</junit.version>
+		<junit.version>5.10.1</junit.version>
 		<logback.version>1.3.12</logback.version>
 		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 	</properties>
@@ -93,6 +93,11 @@
 			<version>${junit.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
 		<!-- END - Tests Dependencies -->
 
 		<!-- BEGIN - Logging Dependencies -->
@@ -196,6 +201,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+			<id>maven2</id>
+			<url>https://repo.maven.apache.org/maven2/</url>
+		</repository>
+	</repositories>
 
 	<profiles>
 		<profile>

@@ -8,6 +8,8 @@ import com.github.spartatech.testutils.logback.constant.LogLevel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,24 @@ public class TestLogbackLevelChangerExtension {
 
         asserter.assertLogExpectations(false);
     }
+
+    @LogbackRunLevel(newLevel = LogLevel.WARN, loggerClass = MockClass.class)
+    @ParameterizedTest
+    @CsvSource({
+            "true",
+            "false"
+    })
+    void parameterizedTest(boolean showLog) {
+        final UnitTestAsserterLogback asserter = new UnitTestAsserterLogback(MockClass.class);
+
+        if (showLog) {
+            asserter.addExpectation(Level.WARN, "Should show");
+            new MockClass().testLog();
+        }
+
+        asserter.assertLogExpectations(false);
+    }
+
 
     /**
      * Testing inner class to simulate method with logs.
