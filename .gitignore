@@ -5,3 +5,6 @@
 /.settings/
 /.idea/
 *.iml
+
+# GPG key renewal script
+renew-gpg-key.sh
